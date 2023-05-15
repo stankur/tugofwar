@@ -1,14 +1,15 @@
-main
-socket
-GameEngine
+server/main
+server/socket
+server/GameEngine
 
 
-.vscode
+server/.vscode
+server/Contents
 
-main.dSYM
-socket.dSYM
-Game.dSYM
-GameEngine.dSYM
+server/main.dSYM
+server/socket.dSYM
+server/Game.dSYM
+server/GameEngine.dSYM
 
-config.env
+server/config.env
 

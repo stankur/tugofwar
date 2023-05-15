@@ -10,7 +10,6 @@
 
 const int WINNING_POINTS_DIFFERENCE = 50;
 const int ROPE_LENGTH = 100;
-bool done = false;
 
 void GameEngine::updateView(int pointDifference) 
 {
@@ -35,12 +34,12 @@ void GameEngine::runViewUpdater()
         this->updateView(pointDifference);
     }
 
-    done = true;
+    *done = true;
 }
 
 void GameEngine::runSelfStateUpdater() 
 {
-    while(!done) {
+    while(!*done) {
         std::cin >> std::noskipws;
         char input{};
         std::cout << "just before cin input" << std::endl;

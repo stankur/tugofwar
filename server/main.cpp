@@ -7,10 +7,11 @@
 
 int main()
 {
+    bool done = false;
     std::vector<int> emptySocketVector;
     GameState GameState{};
 
-    GameEngine GameEngine{&GameState, &emptySocketVector};
+    GameEngine GameEngine{&GameState, &emptySocketVector, &done};
     GameEngine.run();
 
     return 0;
