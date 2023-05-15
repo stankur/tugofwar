@@ -3,10 +3,8 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
-
 #include <iostream>
-
-
+#include <cstddef> 
 
 int PORT = 8080;
 int MAXIMUM_SOCKET_CONNECTIONS = 3;
@@ -49,6 +47,7 @@ void bindSocketToPort()
         perror("failed to bind socket to port");
         exit(EXIT_FAILURE);
     }
+
     std::cout << "yo bounded" << std::endl;
 
 }
@@ -84,6 +83,12 @@ void initializeSocket()
     startListening();
     startAccepting();
 }
+
+long sendToOpponent(int socketId, char* message, size_t messageLength)
+{
+    return send(socketId, message, messageLength, 0);
+};
+
 
 #else
 

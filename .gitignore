@@ -1,5 +1,14 @@
 main
 socket
+GameEngine
+
+
 .vscode
+
 main.dSYM
 socket.dSYM
+Game.dSYM
+GameEngine.dSYM
+
+config.env
+

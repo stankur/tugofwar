@@ -1,9 +1,17 @@
+#include "GameState.h"
+#include "GameEngine.h"
+
 #include <iostream>
-#include "socket.h"
+#include <vector>
+
 
 int main()
 {
-    std::cout << "in main" << std::endl;
-    initializeSocket();
+    std::vector<int> emptySocketVector;
+    GameState GameState{};
+
+    GameEngine GameEngine{&GameState, &emptySocketVector};
+    GameEngine.run();
+
     return 0;
 }
