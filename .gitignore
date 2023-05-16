@@ -2,7 +2,6 @@ server/main
 server/socket
 server/GameEngine
 
-
 server/.vscode
 server/Contents
 
@@ -12,4 +11,12 @@ server/Game.dSYM
 server/GameEngine.dSYM
 
 server/config.env
+
+client/main
+client/socket
+
+client/.vscode
+
+client/main.dSYM
+client/socket.dSYM
 

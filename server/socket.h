@@ -1,14 +1,13 @@
 #ifndef SOCKET_H
 #define SOCKET_H
+#include "GameEngine.h"
 
 #include <cstddef>
+#include <vector>
+#include <thread>
 
-void initializeSocket();
-
-long sendToOpponent(int socketId, char* message, std::size_t messageLength);
+void initializeSocket(std::vector<int>* sockets, GameEngine* gameEngine, bool* done, std::vector<std::thread*>* threads);
+void sendToExternal(int socketId, char* message, std::size_t messageLength);
+void receiveFromExternal(int socketId, char* buffer);
 
 #endif
-
-
-
-

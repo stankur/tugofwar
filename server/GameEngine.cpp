@@ -18,12 +18,12 @@ void GameEngine::updateView(int pointDifference)
     std::cout << barView << std::endl;
 }
 
-void GameEngine::updateOpponents(int pointDifference)
+void GameEngine::updateExternal(int pointDifference)
 {
     std::string opponentBarView ((std::size_t) ((ROPE_LENGTH / 2) - pointDifference),'+');
     
     for (int socketId: *sockets){
-        sendToOpponent(socketId, &opponentBarView[0], opponentBarView.size());
+        sendToExternal(socketId, &opponentBarView[0], opponentBarView.size());
     }
 }
 
@@ -48,6 +48,16 @@ void GameEngine::runSelfStateUpdater()
         std::cout << "successfully listened" << std::endl;
 
         gameState->incrementAllyPoints();
+    }
+}
+
+void GameEngine::runExternalStateUpdater(int socketId)
+{
+    while(!*done) {
+        char* buffer{};
+        receiveFromExternal(socketId, buffer);
+        
+        gameState->incrementOpponentPoints();
     }
 }
 

@@ -1,13 +1,17 @@
 #include "socket.h"
+#include "GameEngine.h"
 
 #include <stdio.h>
 #include <stdlib.h>
-#include <string.h>
+#include <string>
 #include <iostream>
 #include <cstddef> 
+#include <vector>
+#include <thread>
 
 int PORT = 8080;
 int MAXIMUM_SOCKET_CONNECTIONS = 3;
+std::size_t EXPECTED_EXTERNAL_MESSAGE_SIZE_MAX = 1024;
 
 #ifdef __APPLE__
 
@@ -64,29 +68,47 @@ void startListening()
     std::cout << "yo listening" << std::endl;
 }
 
-void startAccepting()
+void startAccepting(std::vector<int>* sockets, GameEngine* gameEngine, bool* done, std::vector<std::thread*>* threads)
 {
-    int newSocket = accept(socketId, nullptr, nullptr);
+    while (static_cast<int>(sockets->size()) < MAXIMUM_SOCKET_CONNECTIONS && !*done) {
+        int newSocket = accept(socketId, nullptr, nullptr);
 
-    if (newSocket < 0) {
-        perror("failed to accept connection");
-        exit(EXIT_FAILURE);
-    } else {
-        std::cout << "yo connected" << std::endl;
+        if (newSocket < 0) {
+            perror("failed to accept connection");
+            exit(EXIT_FAILURE);
+        } else {
+            sockets->push_back(newSocket);
+            std::thread* externalStateUpdater = new std::thread(
+                [&](){
+                    gameEngine->runExternalStateUpdater(socketId);
+                }
+            );
+            threads->push_back(externalStateUpdater);
+            std::cout << "yo acc" << std::endl;
+        }
     }
 }
 
-void initializeSocket()
+void initializeSocket(std::vector<int>* sockets, GameEngine* gameEngine, bool* done, std::vector<std::thread*>* threads)
 {
     createSocket();
     bindSocketToPort();
     startListening();
-    startAccepting();
+    std::thread* acceptingConnectionsThread = new std::thread(startAccepting, sockets, gameEngine, done, threads);
+    threads->push_back(acceptingConnectionsThread);
 }
 
-long sendToOpponent(int socketId, char* message, size_t messageLength)
+void sendToExternal(int socketId, char* message, size_t messageLength)
 {
-    return send(socketId, message, messageLength, 0);
+    auto result = send(socketId, message, messageLength, 0);
+    if (result < 0) {
+        perror("failed to send to external");
+        exit(EXIT_FAILURE);
+    }
+};
+
+void receiveFromExternal(int socketId, char* buffer){
+    read(socketId, buffer, EXPECTED_EXTERNAL_MESSAGE_SIZE_MAX);
 };
 
 
