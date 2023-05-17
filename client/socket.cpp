@@ -21,7 +21,6 @@ void createSocket()
 {
     socketId = socket(AF_INET, SOCK_STREAM, 0);
 
-    std::cout << "socket created: " << socketId << std::endl;
 
     if (socketId < 0) {
         perror("failed to create socket");
@@ -73,9 +72,6 @@ void sendToServer(const char* message, std::size_t messageLength){
 void receiveFromServer(char* buffer){
     while ( read(socketId, buffer, EXPECTED_SERVER_MESSAGE_SIZE_MAX) <= 0) {
         // just loops until get an actual result
-        std::cout << "socket id receiving: " << socketId << std::endl;
-        std::cout << "yo I still think server not giving me any hints man" << std::endl;
-        std::cout << "the error: " << strerror(errno) << std::endl;
 
     }
 };

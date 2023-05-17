@@ -40,7 +40,6 @@ void GameEngine::runServerStateUpdater() {
         std::cin >> std::noskipws;
         char input{};
         std::cin >> input;
-        std::cout << "I got you pressing" << std::endl;
         const char* messageToSendServer {"success"};
         sendToServer(messageToSendServer, strlen(messageToSendServer));
     }

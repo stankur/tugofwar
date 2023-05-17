@@ -54,15 +54,9 @@ void GameEngine::runViewUpdater()
 void GameEngine::runSelfStateUpdater() 
 {
     while(!*done) {
-        std::cout << "yo in self state updater" << std::endl;
-
         std::cin >> std::noskipws;
         char input{};
-        std::cout << "just before cin input" << std::endl;
-
         std::cin >> input;
-        std::cout << "successfully listened" << std::endl;
-
         gameState->incrementAllyPoints();
     }
 }
@@ -70,9 +64,7 @@ void GameEngine::runSelfStateUpdater()
 void GameEngine::runExternalStateUpdater(int socketId)
 {
     while(!*done) {
-        std::cout << "yo in external state updater" << std::endl;
         receiveFromExternal(socketId);
-        std::cout << "yo bruh I got message from external" << std::endl;
 
         gameState->incrementOpponentPoints();
     }
