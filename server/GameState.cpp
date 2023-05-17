@@ -1,5 +1,6 @@
 #include "GameState.h"
 #include <thread>
+#include <iostream>
 
 void GameState::incrementAllyPoints() {
     std::lock_guard<std::mutex> lock(pointsLock);

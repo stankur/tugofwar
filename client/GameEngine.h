@@ -1,3 +1,6 @@
+
+#include <string>
+
 class GameEngine 
 {
     public:
@@ -5,7 +8,7 @@ class GameEngine
     void run();
 
     private:
-    void updateView(char* newView);
+    void updateView(std::string& newView);
     void runViewUpdater();
     void runServerStateUpdater();
 };

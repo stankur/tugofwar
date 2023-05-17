@@ -4,7 +4,7 @@
 #include <cstdlib>
 
 void initializeSocket();
-void sendToServer(char* message, std::size_t messageLength);
+void sendToServer(const char* message, std::size_t messageLength);
 void receiveFromServer(char* buffer);
 
 #endif

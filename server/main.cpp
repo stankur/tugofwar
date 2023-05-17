@@ -6,7 +6,6 @@
 #include <vector>
 #include <thread>
 
-
 int main()
 {
     std::vector<int> sockets;

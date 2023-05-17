@@ -71,19 +71,33 @@ void startListening()
 void startAccepting(std::vector<int>* sockets, GameEngine* gameEngine, bool* done, std::vector<std::thread*>* threads)
 {
     while (static_cast<int>(sockets->size()) < MAXIMUM_SOCKET_CONNECTIONS && !*done) {
+        std::cout << "yo initial bro" << std::endl;
         int newSocket = accept(socketId, nullptr, nullptr);
+        std::cout << "yo passed new socket" << std::endl;
+        std::cout << "new socket" << newSocket << std::endl;
+
 
         if (newSocket < 0) {
             perror("failed to accept connection");
             exit(EXIT_FAILURE);
         } else {
+            std::cout << "yo just entered lmao" << std::endl;
             sockets->push_back(newSocket);
+            std::cout << "yo want to create new thread" << std::endl;
+
             std::thread* externalStateUpdater = new std::thread(
                 [&](){
-                    gameEngine->runExternalStateUpdater(socketId);
+                    gameEngine->runExternalStateUpdater(newSocket);
                 }
             );
+            std::thread* externalViewUpdater = new std::thread(
+                [&](){
+                    gameEngine->updateExternal(newSocket);
+                }
+            );
+
             threads->push_back(externalStateUpdater);
+            threads->push_back(externalViewUpdater);
             std::cout << "yo acc" << std::endl;
         }
     }
@@ -98,17 +112,25 @@ void initializeSocket(std::vector<int>* sockets, GameEngine* gameEngine, bool* d
     threads->push_back(acceptingConnectionsThread);
 }
 
-void sendToExternal(int socketId, char* message, size_t messageLength)
+void sendToExternal(int socketId, const char* message, size_t messageLength)
 {
     auto result = send(socketId, message, messageLength, 0);
+    std::cout << "sent to external" << std::endl;
     if (result < 0) {
         perror("failed to send to external");
         exit(EXIT_FAILURE);
     }
 };
 
-void receiveFromExternal(int socketId, char* buffer){
-    read(socketId, buffer, EXPECTED_EXTERNAL_MESSAGE_SIZE_MAX);
+void receiveFromExternal(int socketId){
+    char * buffer = new char[EXPECTED_EXTERNAL_MESSAGE_SIZE_MAX]();
+
+    while(read(socketId, buffer, EXPECTED_EXTERNAL_MESSAGE_SIZE_MAX) <= 0) {
+        // just loops and blocks until message is received
+    }
+
+    delete[] buffer;
+
 };
 
 
